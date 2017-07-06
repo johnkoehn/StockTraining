@@ -43,10 +43,33 @@ for (i in states)
 
 percentChargedOffPerState <- chargedOffLoansPerState / loansPerState * 100
 print(percentChargedOffPerState)
+rm(loansPerState)
+rm(chargedOffLoansPerState)
+rm(percentChargedOffPerState)
 
-test = c(0)
-for (i in loansPerState)
-{
-    test <- test + loansPerState[i]
-}
-print(test)
+#Examine default rates for A, B, C, D, E and F loans
+defaults <- c()
+defaults[1] <- NROW(subset(data, grade == "A" & loan_status == "Charged Off")) / NROW(subset(data, grade == "A")) * 100
+defaults[2] <- NROW(subset(data, grade == "B" & loan_status == "Charged Off")) / NROW(subset(data, grade == "B")) * 100
+defaults[3] <- NROW(subset(data, grade == "C" & loan_status == "Charged Off")) / NROW(subset(data, grade == "C")) * 100
+defaults[4] <- NROW(subset(data, grade == "D" & loan_status == "Charged Off")) / NROW(subset(data, grade == "D")) * 100
+defaults[5] <- NROW(subset(data, (grade == "E" | grade == "F") & loan_status == "Charged Off")) / NROW(subset(data, grade == "E" | grade == "F")) * 100
+print(defaults)
+test <- data.frame(grade = c("A", "B", "C", "D", "EF"), perDefault = defaults)
+
+barplot(test[["perDefault"]], names.arg = test[["grade"]])
+
+## look at 2008 - 2011
+loans <- c()
+loans[1] <- NROW(with(data, grep("8", issue_d)))
+loans[2] <- NROW(with(data, grep("9", issue_d)))
+loans[3] <- NROW(with(data, grep("10", issue_d)))
+loans[4] <- NROW(with(data, grep("11", issue_d)))
+
+#look at 2008
+defaults <- c()
+data2008 <- data.frame(data[grep("8", issue_d, perl = TRUE),])
+defaults[1] <- NROW(subset(data2008, grade == "A" & loan_status == "Charged Off")) / NROW(subset(data2008, grade == "A")) * 100
+defaults[2] <- NROW(subset(data2008, grade == "B" & loan_status == "Charged Off")) / NROW(subset(data2008, grade == "B")) * 100
+defaults[3] <- NROW(subset(data2008, grade == "C" & loan_status == "Charged Off")) / NROW(subset(data2008, grade == "C")) * 100
+defaults[4] <- NROW(subset(data2008, grade == "D" & loan_status == "Charged Off")) / NROW(subset(data2008, grade == "D")) * 100
